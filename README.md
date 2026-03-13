@@ -2,11 +2,24 @@
 
 Sistema de gestão para pousadas, hotéis pequenos e hostels (Property Management System).
 
+## Aplicação em produção
+
+| Ambiente | URL |
+|----------|-----|
+| **Frontend** | [https://pousadapms-web.onrender.com](https://pousadapms-web.onrender.com) |
+| **API** | [https://pousada-api-zfm4.onrender.com/api](https://pousada-api-zfm4.onrender.com/api) |
+
+**Stack de deploy:** Banco (Supabase) · API (Render, Docker) · Frontend (Render, Static Site)
+
+Guia completo: [DEPLOY.md](DEPLOY.md)
+
+---
+
 ## Tecnologias
 
 - **Frontend:** React 18, TypeScript, Vite, Tailwind CSS
 - **Backend:** NestJS, TypeScript, Prisma
-- **Banco:** PostgreSQL 16
+- **Banco:** PostgreSQL (Supabase em produção)
 
 ## Pré-requisitos
 
