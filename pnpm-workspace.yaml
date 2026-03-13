@@ -1,0 +1,5 @@
+# Define os pacotes do monorepo
+# Permite que apps e packages compartilhem dependências e scripts
+packages:
+  - "apps/*"
+  - "packages/*"

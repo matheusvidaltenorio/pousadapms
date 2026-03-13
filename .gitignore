@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+apps/web/dev-dist/
+.next/
+out/
+
+# Environment variables (NUNCA commitar dados sensíveis!)
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Prisma
+prisma/*.db
+prisma/*.db-journal
+
+# Misc
+*.tsbuildinfo
+.turbo/

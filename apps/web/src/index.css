@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design System - Variáveis CSS para consistência */
+:root {
+  --color-brand-deep: #1E3A5F;
+  --color-brand-soft: #4A6FA5;
+  --color-brand-hover: #2C5282;
+  --color-surface-light: #F4F1EC;
+  --color-surface-white: #FAFAF8;
+  --color-neutral: #6B7280;
+  --color-neutral-border: #D1D5DB;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-surface-light);
+    color: var(--color-brand-deep);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Padrão para inputs - reutilizável em todo o sistema */
+@layer components {
+  .input-default {
+    @apply w-full px-3 py-2 rounded-lg;
+    @apply focus:outline-none focus:ring-2 focus:ring-[#4A6FA5] focus:border-[#4A6FA5];
+    border: 1px solid #D1D5DB;
+    background-color: #FAFAF8;
+    color: #1E3A5F;
+  }
+
+  .input-default::placeholder {
+    color: #9CA3AF;
+  }
+
+  .btn-primary {
+    @apply px-4 py-2 rounded-lg font-medium transition-colors;
+    @apply focus:outline-none focus:ring-2 focus:ring-[#4A6FA5] focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+    background-color: #1E3A5F;
+    color: #FAFAF8;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-color: #2C5282;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 rounded-lg font-medium transition-colors;
+    border: 1px solid #D1D5DB;
+    background-color: #FAFAF8;
+    color: #1E3A5F;
+  }
+
+  .btn-secondary:hover {
+    background-color: #F4F1EC;
+  }
+
+  .card-base {
+    @apply rounded-[10px];
+    background-color: #FAFAF8;
+    border: 1px solid rgba(209, 213, 219, 0.5);
+    box-shadow: 0 1px 3px 0 rgba(30, 58, 95, 0.08), 0 1px 2px -1px rgba(30, 58, 95, 0.05);
+  }
+}

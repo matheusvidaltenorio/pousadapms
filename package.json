@@ -1,0 +1,25 @@
+{
+  "name": "pousada-pms",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sistema de Gestão para Pousadas - PMS (Property Management System)",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev:api & npm run dev:web",
+    "dev:api": "npm run dev --workspace=@pousada-pms/api",
+    "dev:web": "npm run dev --workspace=@pousada-pms/web",
+    "build": "npm run build --workspaces",
+    "build:api": "npm run build --workspace=@pousada-pms/api",
+    "build:web": "npm run build --workspace=@pousada-pms/web",
+    "db:migrate": "npm run db:migrate --workspace=@pousada-pms/api",
+    "db:generate": "npm run db:generate --workspace=@pousada-pms/api",
+    "db:seed": "npm run db:seed --workspace=@pousada-pms/api",
+    "db:studio": "npm run db:studio --workspace=@pousada-pms/api"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
