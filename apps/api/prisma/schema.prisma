@@ -85,6 +85,7 @@ model PropertyUser {
 }
 
 enum PropertyRole {
+  user
   admin
   manager
   receptionist
@@ -145,6 +146,7 @@ enum RoomStatus {
   occupied
   cleaning
   maintenance
+  blocked
 }
 
 // ============================================

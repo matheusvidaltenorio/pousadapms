@@ -52,6 +52,11 @@ export function MainLayout() {
           <NavLink to="/integrations" className={navLinkClass}>
             Integrações
           </NavLink>
+          {user?.role === 'admin' && (
+            <NavLink to="/users" className={navLinkClass}>
+              Gerenciar Usuários
+            </NavLink>
+          )}
           <Link
             to="/bookings/new"
             className="block px-3 py-2 rounded-lg mt-4 bg-[#4A6FA5] text-[#FAFAF8] text-center font-medium hover:bg-[#2C5282] transition-colors"

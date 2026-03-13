@@ -1,9 +1,12 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { ProtectedRoute } from './shared/components/ProtectedRoute'
+import { AdminRoute } from './shared/components/AdminRoute'
 import { MainLayout } from './shared/layouts/MainLayout'
 import { OfflineIndicator } from './shared/components/OfflineIndicator'
 import { SyncEffect } from './core/offline/SyncEffect'
 import { LoginPage } from './features/auth/pages/LoginPage'
+import { RegisterPage } from './features/auth/pages/RegisterPage'
+import { UsersPage } from './features/users/pages/UsersPage'
 import { DashboardPage } from './features/dashboard/pages/DashboardPage'
 import { CalendarPage } from './features/calendar/pages/CalendarPage'
 import { RoomsPage } from './features/rooms/pages/RoomsPage'
@@ -29,6 +32,7 @@ function App() {
       <OfflineIndicator />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
@@ -41,6 +45,7 @@ function App() {
           <Route path="financial" element={<FinancialPage />} />
           <Route path="expenses" element={<ExpensesPage />} />
           <Route path="integrations" element={<IntegrationsPage />} />
+          <Route path="users" element={<AdminRoute><UsersPage /></AdminRoute>} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip } from 'chart.js'
+import { Bar } from 'react-chartjs-2'
 import { apiFetch } from '@/shared/api/client'
 import { useProperty } from '@/shared/hooks/useProperty'
+import { useAuth } from '@/core/auth/useAuth'
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip)
 
 interface DashboardStats {
   totalRooms: number
@@ -12,13 +17,42 @@ interface DashboardStats {
   revenueToday?: number
 }
 
+interface DashboardOverview {
+  todayReservations: { guestName: string; roomNumber: string; type: 'check-in' | 'check-out' }[]
+  roomStatus: { available: number; occupied: number; cleaning: number; maintenance: number; blocked?: number }
+  alerts: string[]
+  occupancyWeek: { day: string; label: string; rate: number }[]
+}
+
+const DAY_NAMES = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado']
+const MONTH_NAMES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+
+function getGreeting() {
+  const h = new Date().getHours()
+  if (h >= 5 && h < 12) return 'Bom dia'
+  if (h >= 12 && h < 18) return 'Boa tarde'
+  return 'Boa noite'
+}
+
+function formatTime(date: Date) {
+  return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+}
+
+function formatDate(date: Date) {
+  return `${DAY_NAMES[date.getDay()]}, ${date.getDate()} de ${MONTH_NAMES[date.getMonth()]} de ${date.getFullYear()}`
+}
+
 /**
- * Dashboard - cards com métricas usando design system.
+ * Dashboard - visão operacional da pousada.
  */
 export function DashboardPage() {
   const propertyId = useProperty()
+  const { user } = useAuth()
   const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [overview, setOverview] = useState<DashboardOverview | null>(null)
   const [loading, setLoading] = useState(true)
+  const [overviewLoading, setOverviewLoading] = useState(true)
+  const [currentTime, setCurrentTime] = useState(() => new Date())
 
   useEffect(() => {
     if (!propertyId) return
@@ -28,11 +62,49 @@ export function DashboardPage() {
       .finally(() => setLoading(false))
   }, [propertyId])
 
+  useEffect(() => {
+    if (!propertyId) return
+    apiFetch<DashboardOverview>(`/dashboard/overview?propertyId=${propertyId}`)
+      .then(setOverview)
+      .catch(() => setOverview(null))
+      .finally(() => setOverviewLoading(false))
+  }, [propertyId])
+
+  useEffect(() => {
+    const interval = setInterval(() => setCurrentTime(new Date()), 1000)
+    return () => clearInterval(interval)
+  }, [])
+
   if (!propertyId) return <p className="text-[#6B7280]">Nenhuma propriedade selecionada.</p>
 
+  const userName = user?.name?.split(' ')[0] || 'Administrador'
+  const occupancyChartData = overview?.occupancyWeek
+    ? {
+        labels: overview.occupancyWeek.map((d) => d.label),
+        datasets: [
+          {
+            label: 'Ocupação (%)',
+            data: overview.occupancyWeek.map((d) => d.rate),
+            backgroundColor: 'rgba(30, 58, 95, 0.7)',
+            borderRadius: 6,
+          },
+        ],
+      }
+    : null
+
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-[#1E3A5F] mb-6">Dashboard</h1>
+    <div className="space-y-6">
+      {/* Topo: Saudação + Data + Hora */}
+      <div className="card-base p-6">
+        <h2 className="text-xl font-bold text-[#1E3A5F]">
+          {getGreeting()}, {userName}
+        </h2>
+        <p className="text-[#6B7280] mt-1">{formatDate(currentTime)}</p>
+        <p className="text-sm text-[#6B7280] mt-1">Hora atual: {formatTime(currentTime)}</p>
+      </div>
+
+      {/* Cards existentes */}
+      <h1 className="text-2xl font-bold text-[#1E3A5F]">Dashboard</h1>
       {loading ? (
         <p className="text-[#6B7280]">Carregando...</p>
       ) : (
@@ -65,7 +137,9 @@ export function DashboardPage() {
               <p className="text-sm text-[#6B7280] mt-1">pagamentos recebidos hoje</p>
             </div>
           </div>
-          <div className="mt-8 flex gap-4">
+
+          {/* Botões de ação rápida */}
+          <div className="flex gap-4">
             <Link to="/calendar" className="btn-primary">
               Ver Calendário
             </Link>
@@ -73,6 +147,123 @@ export function DashboardPage() {
               Nova Reserva
             </Link>
           </div>
+
+          {/* Reservas de Hoje */}
+          <section className="card-base p-6">
+            <h3 className="text-lg font-semibold text-[#1E3A5F] mb-4">Reservas de Hoje</h3>
+            {overviewLoading ? (
+              <p className="text-[#6B7280] text-sm">Carregando...</p>
+            ) : overview?.todayReservations && overview.todayReservations.length > 0 ? (
+              <ul className="space-y-2">
+                {overview.todayReservations.map((r, i) => (
+                  <li key={i} className="text-[#1E3A5F] flex items-center gap-2">
+                    <span className="font-medium">{r.guestName}</span>
+                    <span className="text-[#6B7280]">—</span>
+                    <span>Quarto {r.roomNumber}</span>
+                    <span className="text-[#6B7280]">—</span>
+                    <span
+                      className={`text-sm font-medium px-2 py-0.5 rounded ${
+                        r.type === 'check-in' ? 'bg-[#E8F4EA] text-[#2E7D32]' : 'bg-[#FFF3E0] text-[#E65100]'
+                      }`}
+                    >
+                      {r.type === 'check-in' ? 'Check-in' : 'Check-out'}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-[#6B7280] text-sm">Nenhuma reserva com check-in ou check-out hoje.</p>
+            )}
+          </section>
+
+          {/* Status dos Quartos */}
+          <section className="card-base p-6">
+            <h3 className="text-lg font-semibold text-[#1E3A5F] mb-4">Status dos Quartos</h3>
+            {overviewLoading ? (
+              <p className="text-[#6B7280] text-sm">Carregando...</p>
+            ) : overview?.roomStatus ? (
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div className="p-3 rounded-lg bg-[#E8F5E9] border border-[#C8E6C9]">
+                  <span className="text-sm text-[#6B7280] block">Disponíveis</span>
+                  <span className="text-2xl font-bold text-[#1E3A5F]">{overview.roomStatus.available}</span>
+                </div>
+                <div className="p-3 rounded-lg bg-[#FFEBEE] border border-[#FFCDD2]">
+                  <span className="text-sm text-[#6B7280] block">Ocupados</span>
+                  <span className="text-2xl font-bold text-[#1E3A5F]">{overview.roomStatus.occupied}</span>
+                </div>
+                <div className="p-3 rounded-lg bg-[#FFF8E1] border border-[#FFECB3]">
+                  <span className="text-sm text-[#6B7280] block">Em Limpeza</span>
+                  <span className="text-2xl font-bold text-[#1E3A5F]">{overview.roomStatus.cleaning}</span>
+                </div>
+                <div className="p-3 rounded-lg bg-[#FBE9E7] border border-[#FFCCBC]">
+                  <span className="text-sm text-[#6B7280] block">Manutenção</span>
+                  <span className="text-2xl font-bold text-[#1E3A5F]">{overview.roomStatus.maintenance}</span>
+                </div>
+                <div className="p-3 rounded-lg bg-[#ECEFF1] border border-[#CFD8DC]">
+                  <span className="text-sm text-[#6B7280] block">Bloqueados</span>
+                  <span className="text-2xl font-bold text-[#1E3A5F]">{(overview.roomStatus as { blocked?: number }).blocked ?? 0}</span>
+                </div>
+              </div>
+            ) : (
+              <p className="text-[#6B7280] text-sm">Não foi possível carregar o status.</p>
+            )}
+          </section>
+
+          {/* Avisos */}
+          <section className="card-base p-6">
+            <h3 className="text-lg font-semibold text-[#1E3A5F] mb-4">Avisos</h3>
+            {overviewLoading ? (
+              <p className="text-[#6B7280] text-sm">Carregando...</p>
+            ) : overview?.alerts && overview.alerts.length > 0 ? (
+              <ul className="space-y-2">
+                {overview.alerts.map((msg, i) => (
+                  <li key={i} className="text-[#1E3A5F] flex items-start gap-2">
+                    <span className="text-[#4A6FA5]">•</span>
+                    <span>{msg}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-[#6B7280] text-sm">Nenhum aviso no momento.</p>
+            )}
+          </section>
+
+          {/* Gráfico de Ocupação */}
+          <section className="card-base p-6">
+            <h3 className="text-lg font-semibold text-[#1E3A5F] mb-4">Ocupação últimos 7 dias</h3>
+            {overviewLoading ? (
+              <p className="text-[#6B7280] text-sm">Carregando...</p>
+            ) : occupancyChartData ? (
+              <div className="h-64">
+                <Bar
+                  data={occupancyChartData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: { display: false },
+                      tooltip: {
+                        callbacks: {
+                          label: (ctx) => ` ${ctx.raw}% de ocupação`,
+                        },
+                      },
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                          callback: (v) => `${v}%`,
+                        },
+                      },
+                    },
+                  }}
+                />
+              </div>
+            ) : (
+              <p className="text-[#6B7280] text-sm">Sem dados de ocupação disponíveis.</p>
+            )}
+          </section>
         </>
       )}
     </div>

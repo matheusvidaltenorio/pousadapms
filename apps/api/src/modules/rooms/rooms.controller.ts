@@ -17,8 +17,32 @@ export class RoomsController {
   }
 
   @Post()
-  async createRoom(@Body() data: { propertyId: string; roomTypeId: string; number: string; floor?: number }) {
+  async createRoom(
+    @Body()
+    data: {
+      propertyId: string;
+      roomTypeId: string;
+      number: string;
+      floor?: number;
+      notes?: string;
+    },
+  ) {
     return this.roomsService.createRoom(data);
+  }
+
+  @Put(':id')
+  async updateRoom(
+    @Param('id') id: string,
+    @Body()
+    data: {
+      number?: string;
+      roomTypeId?: string;
+      floor?: number;
+      notes?: string;
+      status?: RoomStatus;
+    },
+  ) {
+    return this.roomsService.updateRoom(id, data);
   }
 
   @Put(':id/status')

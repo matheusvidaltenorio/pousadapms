@@ -23,12 +23,47 @@ export class RoomsService {
     });
   }
 
-  async createRoom(data: { propertyId: string; roomTypeId: string; number: string; floor?: number }) {
+  async createRoom(data: {
+    propertyId: string;
+    roomTypeId: string;
+    number: string;
+    floor?: number;
+    notes?: string;
+  }) {
     return this.prisma.room.create({
       data: {
-        ...data,
+        propertyId: data.propertyId,
+        roomTypeId: data.roomTypeId,
+        number: data.number,
         floor: data.floor ?? 1,
+        notes: data.notes,
       },
+      include: { roomType: true },
+    });
+  }
+
+  async updateRoom(
+    id: string,
+    data: {
+      number?: string;
+      roomTypeId?: string;
+      floor?: number;
+      notes?: string;
+      status?: RoomStatus;
+    },
+  ) {
+    const updateData: any = {};
+    if (data.number !== undefined) updateData.number = data.number;
+    if (data.roomTypeId !== undefined) updateData.roomTypeId = data.roomTypeId;
+    if (data.floor !== undefined) updateData.floor = data.floor;
+    if (data.notes !== undefined) updateData.notes = data.notes;
+    if (data.status !== undefined) updateData.status = data.status;
+    if (Object.keys(updateData).length === 0) {
+      return this.prisma.room.findUniqueOrThrow({ where: { id }, include: { roomType: true } });
+    }
+    return this.prisma.room.update({
+      where: { id },
+      data: updateData,
       include: { roomType: true },
     });
   }

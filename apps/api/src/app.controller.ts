@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Public } from './modules/auth/decorators/public.decorator';
 
 /**
  * Controller raiz - usado para health check e informações básicas da API.
@@ -14,8 +15,15 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Public()
   @Get('health')
   health(): { status: string; timestamp: string } {
     return this.appService.health();
+  }
+
+  @Public()
+  @Get('health/db')
+  async healthDb() {
+    return this.appService.healthDb();
   }
 }

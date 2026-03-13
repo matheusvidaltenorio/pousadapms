@@ -29,13 +29,16 @@ pnpm install
 ### 2. Configurar variáveis de ambiente
 
 ```bash
-# Copie o exemplo e edite
-cp .env.example .env
+# Copie o exemplo e edite (o .env fica em apps/api/)
+cp apps/api/.env.example apps/api/.env
 
-# No .env, configure pelo menos:
-# DATABASE_URL="postgresql://pousada:pousada@localhost:5432/pousada_pms"
+# No apps/api/.env, configure pelo menos:
+# DATABASE_URL="postgresql://postgres:postgres@localhost:5432/pousada_pms?schema=public"
 # JWT_SECRET="sua-chave-secreta-forte"
 ```
+
+> **Importante:** O banco de dados do projeto é `pousada_pms` (com underscore).  
+> No pgAdmin, verifique em **Databases → pousada_pms**. Se você criou `pousadapms` (sem underscore), são bancos diferentes.
 
 ### 3. Subir o banco de dados
 
@@ -91,9 +94,22 @@ pousada-pms/
 | `pnpm run dev:api` | Apenas backend |
 | `pnpm run dev:web` | Apenas frontend |
 | `pnpm run build` | Build de produção |
-| `pnpm run db:migrate` | Executa migrations |
+| `pnpm run db:migrate` | Executa migrations (dev) |
+| `pnpm run db:migrate:deploy` | Executa migrations (produção) |
+| `pnpm run db:seed` | Popula dados iniciais |
+| `pnpm run db:verify` | Verifica status das migrations |
 | `pnpm run db:studio` | Abre Prisma Studio |
 | `pnpm run lint` | Executa lint em todos os pacotes |
+
+## Diagnóstico do banco
+
+Se as tabelas não aparecem no pgAdmin:
+
+1. **Banco correto?** Verifique **Databases → pousada_pms** (com underscore).
+2. **Migrations aplicadas?** Execute `npm run db:migrate` e depois `npm run db:verify`.
+3. **API no ar?** Acesse `http://localhost:3000/health/db` — retorna conexão e lista de tabelas.
+
+Documentação detalhada: [docs/DATABASE_SETUP.md](docs/DATABASE_SETUP.md)
 
 ## Licença
 

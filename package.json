@@ -15,9 +15,11 @@
     "build:api": "npm run build --workspace=@pousada-pms/api",
     "build:web": "npm run build --workspace=@pousada-pms/web",
     "db:migrate": "npm run db:migrate --workspace=@pousada-pms/api",
+    "db:migrate:deploy": "npm run db:migrate:deploy --workspace=@pousada-pms/api",
     "db:generate": "npm run db:generate --workspace=@pousada-pms/api",
     "db:seed": "npm run db:seed --workspace=@pousada-pms/api",
-    "db:studio": "npm run db:studio --workspace=@pousada-pms/api"
+    "db:studio": "npm run db:studio --workspace=@pousada-pms/api",
+    "db:verify": "cd apps/api && npx prisma migrate status"
   },
   "engines": {
     "node": ">=20.0.0"

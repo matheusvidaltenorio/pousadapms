@@ -11,6 +11,19 @@ export class DashboardController {
     return this.dashboardService.getStats(propertyId);
   }
 
+  @Get('overview')
+  async getOverview(@Query('propertyId') propertyId: string) {
+    if (!propertyId) {
+      return {
+        todayReservations: [],
+        roomStatus: { available: 0, occupied: 0, cleaning: 0, maintenance: 0, blocked: 0 },
+        alerts: [],
+        occupancyWeek: [],
+      };
+    }
+    return this.dashboardService.getOverview(propertyId);
+  }
+
   @Get('cash-closure')
   async getCashClosure(
     @Query('propertyId') propertyId: string,
