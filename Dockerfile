@@ -40,5 +40,5 @@ ENV NODE_ENV=production
 
 EXPOSE 3000
 
-# Migrações + start
-CMD ["sh", "-c", "npx prisma migrate deploy --schema=apps/api/prisma/schema.prisma && node apps/api/dist/main.js"]
+# Só inicia a API - migrações rode localmente (DATABASE_URL apontando pro Supabase)
+CMD ["node", "apps/api/dist/main.js"]

@@ -18,7 +18,14 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   }
 
   async onModuleInit() {
-    await this.$connect();
+    // Conexão lazy: evita crash na inicialização se o banco estiver inacessível
+    // Prisma conecta automaticamente na primeira query
+    try {
+      await this.$connect();
+    } catch (err) {
+      console.error('⚠️ Prisma: falha ao conectar ao banco. Verifique DATABASE_URL.', err);
+      // Não propaga o erro - app inicia para permitir health check e logs
+    }
   }
 
   async onModuleDestroy() {
