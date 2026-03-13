@@ -41,4 +41,4 @@ ENV NODE_ENV=production
 EXPOSE 3000
 
 # Só inicia a API - migrações rode localmente (DATABASE_URL apontando pro Supabase)
-CMD ["node", "apps/api/dist/main.js"]
+CMD ["node", "apps/api/dist/src/main.js"]
