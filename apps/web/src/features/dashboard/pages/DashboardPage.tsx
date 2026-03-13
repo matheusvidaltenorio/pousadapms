@@ -5,6 +5,7 @@ import { Bar } from 'react-chartjs-2'
 import { apiFetch } from '@/shared/api/client'
 import { useProperty } from '@/shared/hooks/useProperty'
 import { useAuth } from '@/core/auth/useAuth'
+import { Skeleton, SkeletonCard, SkeletonText } from '@/shared/components/Skeleton'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip)
 
@@ -106,7 +107,11 @@ export function DashboardPage() {
       {/* Cards existentes */}
       <h1 className="text-2xl font-bold text-[#1E3A5F]">Dashboard</h1>
       {loading ? (
-        <p className="text-[#6B7280]">Carregando...</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -152,7 +157,7 @@ export function DashboardPage() {
           <section className="card-base p-6">
             <h3 className="text-lg font-semibold text-[#1E3A5F] mb-4">Reservas de Hoje</h3>
             {overviewLoading ? (
-              <p className="text-[#6B7280] text-sm">Carregando...</p>
+              <SkeletonText lines={4} />
             ) : overview?.todayReservations && overview.todayReservations.length > 0 ? (
               <ul className="space-y-2">
                 {overview.todayReservations.map((r, i) => (
@@ -180,7 +185,11 @@ export function DashboardPage() {
           <section className="card-base p-6">
             <h3 className="text-lg font-semibold text-[#1E3A5F] mb-4">Status dos Quartos</h3>
             {overviewLoading ? (
-              <p className="text-[#6B7280] text-sm">Carregando...</p>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Skeleton key={i} className="h-16 w-full" />
+                ))}
+              </div>
             ) : overview?.roomStatus ? (
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div className="p-3 rounded-lg bg-[#E8F5E9] border border-[#C8E6C9]">
@@ -213,7 +222,7 @@ export function DashboardPage() {
           <section className="card-base p-6">
             <h3 className="text-lg font-semibold text-[#1E3A5F] mb-4">Avisos</h3>
             {overviewLoading ? (
-              <p className="text-[#6B7280] text-sm">Carregando...</p>
+              <SkeletonText lines={3} />
             ) : overview?.alerts && overview.alerts.length > 0 ? (
               <ul className="space-y-2">
                 {overview.alerts.map((msg, i) => (
@@ -232,7 +241,7 @@ export function DashboardPage() {
           <section className="card-base p-6">
             <h3 className="text-lg font-semibold text-[#1E3A5F] mb-4">Ocupação últimos 7 dias</h3>
             {overviewLoading ? (
-              <p className="text-[#6B7280] text-sm">Carregando...</p>
+              <Skeleton className="h-64 w-full" />
             ) : occupancyChartData ? (
               <div className="h-64">
                 <Bar

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { apiFetch } from '@/shared/api/client'
+import { SkeletonText } from '@/shared/components/Skeleton'
 
 const STATUS_LABELS: Record<string, string> = {
   pending: 'Pendente',
@@ -85,7 +86,7 @@ export function BookingDetailPage() {
     apiFetch<Booking>(`/bookings/${id}`).then(setBooking)
   }
 
-  if (loading) return <p>Carregando...</p>
+  if (loading) return <SkeletonText lines={5} />
   if (!booking) return <p className="text-red-600">Reserva não encontrada.</p>
 
   return (

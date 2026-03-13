@@ -1,6 +1,22 @@
 import { useEffect, useState } from 'react'
 import { apiFetch } from '@/shared/api/client'
 import { useProperty } from '@/shared/hooks/useProperty'
+import { Skeleton } from '@/shared/components/Skeleton'
+
+function UsersSkeleton() {
+  return (
+    <div className="space-y-4">
+      <Skeleton className="h-8 w-48" />
+      <div className="card-base overflow-hidden">
+        <div className="p-4 space-y-3">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Skeleton key={i} className="h-12 w-full" />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const ROLE_OPTIONS = [
   { value: 'user', label: 'Usuário' },
@@ -76,7 +92,7 @@ export function UsersPage() {
   }
 
   if (!propertyId) return <p className="text-[#6B7280]">Nenhuma propriedade selecionada.</p>
-  if (loading) return <p className="text-[#6B7280]">Carregando usuários...</p>
+  if (loading) return <UsersSkeleton />
   if (error) return <p className="text-red-600">{error}</p>
 
   return (

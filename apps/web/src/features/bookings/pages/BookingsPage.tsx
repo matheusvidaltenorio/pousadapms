@@ -2,6 +2,25 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { apiFetch } from '@/shared/api/client'
 import { useProperty } from '@/shared/hooks/useProperty'
+import { Skeleton } from '@/shared/components/Skeleton'
+
+function BookingsSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between">
+        <Skeleton className="h-8 w-32" />
+        <Skeleton className="h-10 w-28" />
+      </div>
+      <div className=" rounded-lg overflow-hidden border border-[#D1D5DB]">
+        <div className="p-4 space-y-3">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Skeleton key={i} className="h-12 w-full" />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const STATUS_LABELS: Record<string, string> = {
   pending: 'Pendente',
@@ -41,7 +60,7 @@ export function BookingsPage() {
   }, [propertyId])
 
   if (!propertyId) return <p className="text-gray-500">Nenhuma propriedade selecionada.</p>
-  if (loading) return <p>Carregando reservas...</p>
+  if (loading) return <BookingsSkeleton />
   if (error) return <p className="text-red-600">{error}</p>
 
   return (

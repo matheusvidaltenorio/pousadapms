@@ -1,6 +1,25 @@
 import { useEffect, useState } from 'react'
 import { apiFetch } from '@/shared/api/client'
 import { useProperty } from '@/shared/hooks/useProperty'
+import { Skeleton } from '@/shared/components/Skeleton'
+
+function RoomsSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between">
+        <Skeleton className="h-8 w-24" />
+        <Skeleton className="h-10 w-36" />
+      </div>
+      <div className="card-base overflow-hidden">
+        <div className="p-4 space-y-3">
+          {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+            <Skeleton key={i} className="h-12 w-full" />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const STATUS_OPTIONS = [
   { value: 'available', label: 'Disponível', color: 'bg-green-100 text-green-800 border-green-200' },
@@ -194,7 +213,7 @@ export function RoomsPage() {
   }
 
   if (!propertyId) return <p className="text-[#6B7280]">Nenhuma propriedade selecionada.</p>
-  if (loading) return <p className="text-[#6B7280]">Carregando quartos...</p>
+  if (loading) return <RoomsSkeleton />
   if (error) return <p className="text-red-600">{error}</p>
 
   const selectedType = roomTypes.find((t) => t.id === formRoomTypeId)

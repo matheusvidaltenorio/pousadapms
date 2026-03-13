@@ -46,7 +46,7 @@ export function LoginPage() {
       style={{
         backgroundImage: 'url(/padre-cicero.png)',
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundPosition: 'center 55%',
       }}
     >
       {/* Overlay azul escuro sobre a foto */}

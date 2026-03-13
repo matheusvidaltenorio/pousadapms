@@ -52,12 +52,13 @@ export function RegisterPage() {
   if (success) {
     return (
       <div className="min-h-screen flex items-center justify-center relative">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: 'url(/padre-cicero.png)',
-          }}
-        />
+      <div
+        className="absolute inset-0 bg-cover"
+        style={{
+          backgroundImage: 'url(/padre-cicero.png)',
+          backgroundPosition: 'center 55%',
+        }}
+      />
         <div
           className="absolute inset-0"
           style={{
@@ -76,9 +77,10 @@ export function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Fundo: foto em tela cheia com overlay */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover"
         style={{
           backgroundImage: 'url(/padre-cicero.png)',
+          backgroundPosition: 'center 55%',
         }}
       />
       <div

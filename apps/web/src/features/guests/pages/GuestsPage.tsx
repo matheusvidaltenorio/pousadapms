@@ -2,6 +2,25 @@ import { useEffect, useState } from 'react'
 import { apiFetch } from '@/shared/api/client'
 import { useProperty } from '@/shared/hooks/useProperty'
 import { CityAutocomplete } from '@/shared/components/CityAutocomplete'
+import { Skeleton } from '@/shared/components/Skeleton'
+
+function GuestsSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between">
+        <Skeleton className="h-8 w-40" />
+        <Skeleton className="h-10 w-36" />
+      </div>
+      <div className="card-base overflow-hidden">
+        <div className="p-4 space-y-3">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <Skeleton key={i} className="h-12 w-full" />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 interface Guest {
   id: string
@@ -34,7 +53,7 @@ export function GuestsPage() {
   }, [propertyId])
 
   if (!propertyId) return <p className="text-gray-500">Nenhuma propriedade selecionada.</p>
-  if (loading) return <p>Carregando hóspedes...</p>
+  if (loading) return <GuestsSkeleton />
   if (error) return <p className="text-red-600">{error}</p>
 
   const handleCreateGuest = async (e: React.FormEvent) => {
