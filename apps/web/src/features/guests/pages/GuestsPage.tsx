@@ -67,13 +67,6 @@ export function GuestsPage() {
     }
   }
 
-  const refreshGuests = () => {
-    if (!propertyId) return
-    apiFetch<Guest[]>(`/guests?propertyId=${propertyId}`)
-      .then(setGuests)
-      .catch((e) => setError(e.message || 'Erro ao carregar'))
-  }
-
   return (
     <div>
       <div className="flex justify-between items-center mb-6">

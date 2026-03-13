@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { apiFetch } from '@/shared/api/client'
-import { useProperty } from '@/shared/hooks/useProperty'
 
 const STATUS_LABELS: Record<string, string> = {
   pending: 'Pendente',

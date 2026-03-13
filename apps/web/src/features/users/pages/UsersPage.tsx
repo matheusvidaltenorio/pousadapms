@@ -2,14 +2,6 @@ import { useEffect, useState } from 'react'
 import { apiFetch } from '@/shared/api/client'
 import { useProperty } from '@/shared/hooks/useProperty'
 
-const ROLE_LABELS: Record<string, string> = {
-  user: 'Usuário',
-  receptionist: 'Recepcionista',
-  admin: 'Administrador',
-  manager: 'Gerente',
-  housekeeping: 'Limpeza',
-}
-
 const ROLE_OPTIONS = [
   { value: 'user', label: 'Usuário' },
   { value: 'receptionist', label: 'Recepcionista' },
