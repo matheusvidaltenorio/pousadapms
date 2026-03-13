@@ -1,6 +1,6 @@
 # Dockerfile para deploy da API Pousada PMS
-# Build: linux/amd64 (requisito do Render)
-FROM --platform=linux/amd64 node:20-alpine AS builder
+# Usa node:20-slim (Debian) - Alpine causa problemas com Prisma/OpenSSL
+FROM --platform=linux/amd64 node:20-slim AS builder
 
 WORKDIR /app
 
@@ -23,9 +23,12 @@ RUN npx prisma generate --schema=apps/api/prisma/schema.prisma
 RUN npm run build:api
 
 # Estágio de produção
-FROM --platform=linux/amd64 node:20-alpine
+FROM --platform=linux/amd64 node:20-slim
 
 WORKDIR /app
+
+# Dependências para Prisma (libssl, etc)
+RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 
 # Copiar dependências e build
 COPY --from=builder /app/node_modules ./node_modules
@@ -40,5 +43,5 @@ ENV NODE_ENV=production
 
 EXPOSE 3000
 
-# Migrações + start (Prisma CLI está em node_modules)
+# Migrações + start
 CMD ["sh", "-c", "npx prisma migrate deploy --schema=apps/api/prisma/schema.prisma && node apps/api/dist/main.js"]
