@@ -14,7 +14,7 @@ services:
     region: oregon
 
     buildCommand: npm install && npx prisma generate --schema=apps/api/prisma/schema.prisma && npx prisma migrate deploy --schema=apps/api/prisma/schema.prisma && npm run build:api
-    startCommand: node apps/api/dist/main.js
+    startCommand: node apps/api/dist/src/main.js
 
     envVars:
       - key: DATABASE_URL
@@ -26,7 +26,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: CORS_ORIGIN
-        value: https://pousada-web.onrender.com
+        value: https://pousadapms-web.onrender.com
 
   # Frontend React (Static Site) - static sites não suportam region
   - type: web

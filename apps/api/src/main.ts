@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
 
 /**
  * Ponto de entrada da aplicação backend.
@@ -10,6 +11,8 @@ import { AppModule } from './app.module';
  */
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   // Habilita validação automática de DTOs (class-validator)
   app.useGlobalPipes(
@@ -23,9 +26,14 @@ async function bootstrap() {
   // Prefixo global para todas as rotas da API
   app.setGlobalPrefix('api');
 
-  // CORS: permite requisições do frontend (ajustar em produção)
+  // CORS: permite requisições do frontend
+  // CORS_ORIGIN (única) ou CORS_ORIGINS (várias, separadas por vírgula)
+  const corsOrigin = process.env.CORS_ORIGIN || process.env.CORS_ORIGINS;
+  const origins = corsOrigin
+    ? corsOrigin.split(',').map((o) => o.trim()).filter(Boolean)
+    : ['http://localhost:5173'];
   app.enableCors({
-    origin: process.env.CORS_ORIGIN ?? 'http://localhost:5173',
+    origin: origins.length === 1 ? origins[0] : origins,
     credentials: true,
   });
 

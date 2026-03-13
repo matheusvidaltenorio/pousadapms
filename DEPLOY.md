@@ -194,3 +194,4 @@ Deploy automatizado que cria PostgreSQL, API e Static Site de uma vez.
 | CORS bloqueando requisições | `CORS_ORIGIN` deve ser exatamente a URL do frontend, sem barra no final. |
 | Frontend não chama a API | Confirme `VITE_API_URL` e faça redeploy do Static Site. Variáveis do Vite são em build time. |
 | Build do Docker falha | Verifique se `Dockerfile` está na raiz e se o `package-lock.json` existe. |
+| **500 no cadastro/registro** | 1) Verifique os **Logs** da API no Render para ver o erro real. 2) **Rode o seed**: o cadastro exige que exista pelo menos uma propriedade. Use `DATABASE_URL` do banco e execute: `npx prisma migrate deploy --schema=apps/api/prisma/schema.prisma` e depois `npx prisma db seed --schema=apps/api/prisma/schema.prisma`. 3) Se usar Supabase, confirme a Connection string (Pooler, usuário correto) e que as migrações foram aplicadas. |
