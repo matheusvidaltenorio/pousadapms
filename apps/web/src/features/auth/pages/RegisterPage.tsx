@@ -51,8 +51,20 @@ export function RegisterPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F4F1EC] p-6">
-        <div className="bg-[#FAFAF8] rounded-[10px] shadow-card p-8 max-w-md text-center">
+      <div className="min-h-screen flex items-center justify-center relative">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: 'url(/padre-cicero.png)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(rgba(30,58,95,0.85), rgba(30,58,95,0.85))',
+          }}
+        />
+        <div className="relative z-10 bg-[#FAFAF8] rounded-[10px] shadow-card p-8 max-w-md text-center mx-4">
           <p className="text-lg font-medium text-green-700 mb-2">Conta criada com sucesso!</p>
           <p className="text-[#6B7280] text-sm">Redirecionando para o login...</p>
         </div>
@@ -61,28 +73,28 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      {/* Fundo: foto em tela cheia com overlay */}
       <div
-        className="hidden lg:flex lg:w-1/2 relative bg-[#1E3A5F] overflow-hidden"
+        className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage: 'url(/padre-cicero.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
         }}
-      >
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(rgba(30,58,95,0.75), rgba(30,58,95,0.75))',
-          }}
-        />
-        <div className="relative z-10 flex flex-col justify-end p-12 text-white/90">
-          <p className="text-lg font-medium">Juazeiro do Norte</p>
-          <p className="text-sm opacity-80">Crie sua conta no Pousada PMS</p>
-        </div>
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(rgba(30,58,95,0.75), rgba(30,58,95,0.75))',
+        }}
+      />
+      {/* Legenda no canto inferior esquerdo */}
+      <div className="absolute bottom-6 left-6 z-10 text-white/90">
+        <p className="text-lg font-medium">Juazeiro do Norte</p>
+        <p className="text-sm opacity-80">Referência ao Padre Cícero</p>
       </div>
 
-      <div className="flex-1 flex items-center justify-center bg-[#F4F1EC] p-6">
+      {/* Card de cadastro centralizado */}
+      <div className="relative z-10 w-full max-w-md mx-4">
         <div className="w-full max-w-md">
           <div className="bg-[#FAFAF8] rounded-[10px] shadow-card p-8 border border-[#D1D5DB]/50">
             <h1 className="text-2xl font-bold text-[#1E3A5F] text-center mb-2">

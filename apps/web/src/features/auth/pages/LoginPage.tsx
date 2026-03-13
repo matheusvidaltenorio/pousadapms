@@ -41,32 +41,29 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex">
-      {/* Lado esquerdo: imagem Padre Cícero com overlay */}
+    <div
+      className="min-h-screen flex items-center justify-center relative overflow-hidden p-4"
+      style={{
+        backgroundImage: 'url(/padre-cicero.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      {/* Overlay azul escuro sobre a foto */}
       <div
-        className="hidden lg:flex lg:w-1/2 relative bg-[#1E3A5F] overflow-hidden"
+        className="absolute inset-0"
         style={{
-          backgroundImage: 'url(/padre-cicero.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          background: 'linear-gradient(rgba(30,58,95,0.7), rgba(30,58,95,0.75))',
         }}
-      >
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(rgba(30,58,95,0.75), rgba(30,58,95,0.75))',
-          }}
-        />
-        <div className="relative z-10 flex flex-col justify-end p-12 text-white/90">
-          <p className="text-lg font-medium">Juazeiro do Norte</p>
-          <p className="text-sm opacity-80">Referência ao Padre Cícero</p>
-        </div>
+      />
+      <div className="absolute bottom-4 left-4 text-white/90 z-10 text-sm">
+        <p className="font-medium">Juazeiro do Norte</p>
+        <p className="opacity-80">Referência ao Padre Cícero</p>
       </div>
 
-      {/* Lado direito: card de login */}
-      <div className="flex-1 flex items-center justify-center bg-[#F4F1EC] p-6">
-        <div className="w-full max-w-md">
-          <div className="bg-[#FAFAF8] rounded-[10px] shadow-card p-8 border border-[#D1D5DB]/50">
+      {/* Card de login centralizado */}
+      <div className="relative z-10 w-full max-w-md">
+        <div className="bg-[#FAFAF8] rounded-[10px] shadow-xl p-8 border border-white/20 backdrop-blur-sm">
             <h1 className="text-2xl font-bold text-[#1E3A5F] text-center mb-2">Pousada PMS</h1>
             <p className="text-sm text-[#6B7280] text-center mb-8">
               Sistema de Gestão de Pousadas
@@ -113,7 +110,6 @@ export function LoginPage() {
                 </Link>
               </p>
             </form>
-          </div>
         </div>
       </div>
     </div>
