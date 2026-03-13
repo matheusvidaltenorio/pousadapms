@@ -26,14 +26,12 @@ services:
       - key: NODE_ENV
         value: production
       - key: CORS_ORIGIN
-        sync: false  # Defina a URL do frontend após deploy (ex: https://pousada-web.onrender.com)
+        value: https://pousada-web.onrender.com
 
-  # Frontend React (Static Site)
+  # Frontend React (Static Site) - static sites não suportam region
   - type: web
     name: pousada-web
     runtime: static
-    region: oregon
-
     buildCommand: npm install && npm run build:web
     staticPublishPath: apps/web/dist
 
@@ -45,4 +43,4 @@ services:
 
     envVars:
       - key: VITE_API_URL
-        sync: false  # Defina a URL da API após deploy (ex: https://pousada-api.onrender.com/api)
+        value: https://pousada-api.onrender.com/api
